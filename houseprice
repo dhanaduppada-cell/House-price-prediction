@@ -1,0 +1,36 @@
+#st:1 Import Libraries
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error, r2_score
+
+#st:2 Load Dataset
+url="https://raw.githubusercontent.com/selva86/datasets/master/BostonHousing.csv"
+data=pd.read_csv(url)
+#st3: Display 1st few rows
+print(data.head())
+#st4: check null val
+print(data.isnull().sum())
+#st5:select
+X=data[['rm','lstat','ptratio']]
+y=data[['medv']]
+#st6:split dataset
+X_train,X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+#st7: create and train model
+model=LinearRegression()
+model.fit(X_train, y_train)
+#st 8: make predictions
+y_pred=model.predict(X_test)
+#st9: evaluate model
+mse = mean_squared_error(y_test, y_pred)
+mse=np.sqrt(mse)
+r2 = r2_score(y_test, y_pred)
+print("RMSE:", mse)
+print("R2 Score:", r2)
+#st10: plot actual  vs predicted
+plt.scatter (y_test, y_pred)
+plt.xlabel("Actual Prices")
+plt.ylabel("Predicted prices")
